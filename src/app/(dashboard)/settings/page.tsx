@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 
 export default function SettingsPage() {
@@ -8,9 +9,12 @@ export default function SettingsPage() {
   const [username, setUsername] = useState("");
   const [bio, setBio] = useState("");
   const [isPublic, setIsPublic] = useState(true);
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [message, setMessage] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     async function loadProfile() {
@@ -23,11 +27,44 @@ export default function SettingsPage() {
         setUsername(data.username ?? "");
         setBio(data.bio ?? "");
         setIsPublic(data.is_public ?? true);
+        setAvatarUrl(data.avatar_url ?? null);
       }
       setLoading(false);
     }
     loadProfile();
   }, []);
+
+  async function handleAvatarUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) { setMessage("5MB 이하 파일만 업로드 가능합니다"); return; }
+
+    setUploading(true);
+    setMessage("");
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+
+    const ext = file.name.split(".").pop();
+    const path = `${user.id}.${ext}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from("avatars")
+      .upload(path, file, { upsert: true });
+
+    if (uploadError) {
+      setMessage(`업로드 오류: ${uploadError.message}`);
+      setUploading(false);
+      return;
+    }
+
+    const { data: { publicUrl } } = supabase.storage.from("avatars").getPublicUrl(path);
+    await supabase.from("profiles").update({ avatar_url: publicUrl }).eq("id", user.id);
+    setAvatarUrl(publicUrl);
+    setMessage("사진이 업로드되었습니다!");
+    setTimeout(() => setMessage(""), 3000);
+    setUploading(false);
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -44,6 +81,8 @@ export default function SettingsPage() {
     setMessage(error ? `오류: ${error.message}` : "저장되었습니다!");
     setTimeout(() => setMessage(""), 3000);
   }
+
+  const initials = (displayName || username || "?").slice(0, 2).toUpperCase();
 
   if (loading) {
     return <div className="px-8 py-8 text-[#999] text-sm">불러오는 중...</div>;
@@ -63,19 +102,50 @@ export default function SettingsPage() {
             프로필 사진
           </div>
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-full bg-white border-2 border-[#e10600] flex items-center justify-center flex-shrink-0">
-              <span className="text-[#e10600] font-black text-xl" style={{ fontFamily: "var(--font-barlow)" }}>
-                {(displayName || username || "?").slice(0, 2).toUpperCase()}
-              </span>
+            <div className="w-16 h-16 rounded-full bg-white border-2 border-[#e10600] flex items-center justify-center flex-shrink-0 overflow-hidden">
+              {avatarUrl ? (
+                <Image src={avatarUrl} alt="avatar" width={64} height={64} className="object-cover w-full h-full" />
+              ) : (
+                <span className="text-[#e10600] font-black text-xl" style={{ fontFamily: "var(--font-barlow)" }}>
+                  {initials}
+                </span>
+              )}
             </div>
-            <button
-              type="button"
-              className="px-4 py-2 border border-[#e8e8e8] hover:border-[#d0d0d0] text-[#777] hover:text-[#111] text-xs font-bold transition-all bg-white"
-              style={{ fontFamily: "var(--font-barlow)", letterSpacing: "0.1em" }}
-            >
-              사진 변경 (준비 중)
-            </button>
+            <div className="flex gap-2">
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/jpeg,image/png,image/gif,image/webp"
+                className="hidden"
+                onChange={handleAvatarUpload}
+              />
+              <button
+                type="button"
+                disabled={uploading}
+                onClick={() => fileInputRef.current?.click()}
+                className="px-4 py-2 border border-[#e8e8e8] hover:border-[#e10600]/40 text-[#777] hover:text-[#111] text-xs font-bold transition-all bg-white disabled:opacity-50"
+                style={{ fontFamily: "var(--font-barlow)", letterSpacing: "0.1em" }}
+              >
+                {uploading ? "업로드 중..." : "사진 변경"}
+              </button>
+              {avatarUrl && (
+                <button
+                  type="button"
+                  onClick={async () => {
+                    const supabase = createClient();
+                    const { data: { user } } = await supabase.auth.getUser();
+                    if (user) await supabase.from("profiles").update({ avatar_url: null }).eq("id", user.id);
+                    setAvatarUrl(null);
+                  }}
+                  className="px-4 py-2 border border-[#e8e8e8] hover:border-[#e10600]/40 text-[#bbb] hover:text-[#e10600] text-xs font-bold transition-all bg-white"
+                  style={{ fontFamily: "var(--font-barlow)", letterSpacing: "0.1em" }}
+                >
+                  삭제
+                </button>
+              )}
+            </div>
           </div>
+          <p className="text-[11px] text-[#bbb] mt-2">JPG, PNG, GIF · 최대 5MB</p>
         </div>
 
         {/* Display name */}
@@ -147,7 +217,7 @@ export default function SettingsPage() {
         </div>
 
         {message && (
-          <p className={`text-xs py-1 ${message.startsWith("오류") ? "text-[#e10600]" : "text-green-600"}`}>
+          <p className={`text-xs py-1 ${message.startsWith("오류") || message.includes("오류") ? "text-[#e10600]" : "text-green-600"}`}>
             {message}
           </p>
         )}

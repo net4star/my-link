@@ -1,13 +1,29 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import PublicProfileLinks from "@/components/PublicProfileLinks";
+
+const THEME_BG: Record<string, string> = {
+  dark:     "#0a0a0a",
+  light:    "#f5f5f5",
+  pastel:   "#fdf4ff",
+  gradient: "#0f172a",
+};
+
+const THEME_TEXT: Record<string, { text: string; subtext: string }> = {
+  dark:     { text: "#ffffff", subtext: "#555555" },
+  light:    { text: "#111111", subtext: "#777777" },
+  pastel:   { text: "#111111", subtext: "#888888" },
+  gradient: { text: "#ffffff", subtext: "#64748b" },
+};
 
 export async function generateMetadata({ params }: { params: Promise<{ username: string }> }): Promise<Metadata> {
   const { username } = await params;
   const supabase = await createClient();
   const { data: profile } = await supabase
     .from("profiles")
-    .select("display_name, bio")
+    .select("display_name, bio, avatar_url")
     .eq("username", username)
     .eq("is_public", true)
     .single();
@@ -15,6 +31,7 @@ export async function generateMetadata({ params }: { params: Promise<{ username:
   return {
     title: profile ? `${profile.display_name || username} | MyLink` : `${username} | MyLink`,
     description: profile?.bio ?? "",
+    openGraph: profile?.avatar_url ? { images: [profile.avatar_url] } : {},
   };
 }
 
@@ -24,7 +41,7 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("id, username, display_name, bio, is_public")
+    .select("id, username, display_name, bio, is_public, theme, avatar_url")
     .eq("username", username)
     .eq("is_public", true)
     .single();
@@ -33,68 +50,66 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
 
   const { data: links } = await supabase
     .from("links")
-    .select("*")
+    .select("id, title, url")
     .eq("profile_id", profile.id)
     .eq("is_active", true)
     .order("sort_order");
 
+  // Resolve theme
+  const t = (profile.theme ?? {}) as Record<string, string>;
+  const themeId = t.themeId ?? "dark";
+  const bg = THEME_BG[themeId] ?? "#0a0a0a";
+  const { text, subtext } = THEME_TEXT[themeId] ?? { text: "#fff", subtext: "#555" };
+  const btnColor  = t.buttonColor ?? "#e10600";
+  const btnRadius = t.buttonStyle === "rounded" ? "9999px" : "0px";
+  const btnShadow = t.buttonStyle === "shadow"  ? "4px 4px 0 rgba(0,0,0,0.2)" : "none";
+  const font      = t.font ? `'${t.font}', var(--font-barlow)` : "var(--font-barlow)";
+
   const displayName = profile.display_name || profile.username;
-  const initials = displayName.slice(0, 2).toUpperCase();
+  const initials    = displayName.slice(0, 2).toUpperCase();
+
+  const theme = { bg, text, subtext, btnColor, btnRadius, btnShadow, font };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white flex flex-col items-center px-4 py-12">
+    <div
+      className="min-h-screen flex flex-col items-center px-4 py-12"
+      style={{ background: bg, color: text }}
+    >
       {/* Profile */}
       <div className="w-full max-w-sm text-center mb-8">
-        <div className="w-20 h-20 rounded-full bg-[#1a1a1a] border-[3px] border-[#e10600] mx-auto mb-4 flex items-center justify-center ring-pulse">
-          <span
-            className="text-[#e10600] font-black text-2xl select-none"
-            style={{ fontFamily: "var(--font-barlow)" }}
-          >
-            {initials}
-          </span>
+        <div className="w-20 h-20 rounded-full border-[3px] border-[#e10600] mx-auto mb-4 overflow-hidden ring-pulse flex items-center justify-center"
+          style={{ background: themeId === "dark" || themeId === "gradient" ? "#1a1a1a" : "#e8e8e8" }}>
+          {profile.avatar_url ? (
+            <Image src={profile.avatar_url} alt={displayName} width={80} height={80} className="object-cover w-full h-full" />
+          ) : (
+            <span className="text-[#e10600] font-black text-2xl select-none" style={{ fontFamily: "var(--font-barlow)" }}>
+              {initials}
+            </span>
+          )}
         </div>
-        <h1
-          className="text-2xl font-black mb-1"
-          style={{ fontFamily: "var(--font-barlow)" }}
-        >
+        <h1 className="text-2xl font-black mb-1" style={{ fontFamily: "var(--font-barlow)", color: text }}>
           {displayName}
         </h1>
         {profile.bio && (
-          <p className="text-[#555] text-sm leading-relaxed">{profile.bio}</p>
+          <p className="text-sm leading-relaxed" style={{ color: subtext }}>{profile.bio}</p>
         )}
       </div>
 
-      {/* Links */}
-      <div className="w-full max-w-sm space-y-2.5">
-        {(links ?? []).map((link) => (
-          <a
-            key={link.id}
-            href={link.url}
-            target={link.url.startsWith("http") ? "_blank" : "_self"}
-            rel="noopener noreferrer"
-            className="group flex items-center justify-center gap-2 w-full
-                       border border-[#1e1e1e] bg-[#0e0e0e] hover:bg-[#120000]
-                       hover:border-[#e10600]/40 px-6 py-4
-                       font-bold text-[15px] transition-all duration-200"
-            style={{ fontFamily: "var(--font-barlow)", letterSpacing: "0.05em" }}
-          >
-            {link.title}
-            <span className="text-[#333] group-hover:text-[#e10600] group-hover:translate-x-1 transition-all text-xs">→</span>
-          </a>
-        ))}
-        {(links ?? []).length === 0 && (
-          <p className="text-center text-[#333] text-sm py-8">아직 링크가 없습니다</p>
-        )}
-      </div>
+      {/* Links (client component — handles click tracking) */}
+      <PublicProfileLinks
+        profileId={profile.id}
+        links={links ?? []}
+        theme={theme}
+      />
 
       {/* Footer */}
       <div className="mt-12 text-center">
         <a
           href="/"
-          className="text-[11px] tracking-[0.2em] text-[#2a2a2a] hover:text-[#444] transition-colors uppercase font-bold"
-          style={{ fontFamily: "var(--font-barlow)" }}
+          className="text-[11px] tracking-[0.2em] uppercase font-bold transition-colors"
+          style={{ color: subtext, fontFamily: "var(--font-barlow)" }}
         >
-          MY<span className="text-[#e10600]/40">LINK</span>으로 만들기
+          MY<span style={{ color: `${btnColor}60` }}>LINK</span>으로 만들기
         </a>
       </div>
     </div>

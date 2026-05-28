@@ -95,7 +95,7 @@ export default function LandingPage() {
                 무료로 시작하기
               </Link>
               <Link
-                href="/hanstar"
+                href="/demo"
                 className="inline-flex items-center justify-center gap-2 border border-[#e0e0e0] hover:border-[#e10600]/40 text-[#777] hover:text-[#111] px-8 py-4 transition-all text-lg font-bold bg-white"
                 style={{ fontFamily: "var(--font-barlow)", letterSpacing: "0.05em" }}
               >
