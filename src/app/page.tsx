@@ -1,362 +1,205 @@
-import ProfileImage from "@/components/ProfileImage";
+import Link from "next/link";
 
-/* ─── EDIT YOUR PROFILE ──────────────────────────────────────────────────── */
-const PROFILE = {
-  name: "hanstar",
-  title: "DEVELOPER",
-  bio: "hanyang university vibe coding project",
-  racingNumber: "30",
-  initials: "HS",
-};
-
-const ABOUT = {
-  text: "Write a more detailed introduction here. Talk about your background, what drives you, and your approach to work. Keep it authentic and concise.",
-  stats: [
-    { label: "FOCUS",  value: "Full Stack Dev" },
-    { label: "BASE",   value: "Seoul, KR"       },
-    { label: "STATUS", value: "Open to Work"    },
-  ],
-};
-
-const EXPERIENCES = [
-  {
-    period: "2024 — PRESENT",
-    role: "FRONTEND DEVELOPER",
-    company: "Company Name",
-    description: "Describe your role and key achievements here.",
-  },
-  {
-    period: "2022 — 2024",
-    role: "JUNIOR DEVELOPER",
-    company: "Previous Company",
-    description: "Describe your role and key achievements here.",
-  },
-  {
-    period: "2021 — 2022",
-    role: "INTERN",
-    company: "Startup Name",
-    description: "Describe your role and key achievements here.",
-  },
-  {
-    period: "2020 — 2021",
-    role: "FREELANCER",
-    company: "Self-Employed",
-    description: "Describe your role and key achievements here.",
-  },
-];
-
-const ACTIVITIES = [
-  {
-    year: "2025",
-    title: "PROJECT NAME",
-    tags: ["Next.js", "TypeScript", "Tailwind"],
-    description: "Brief description of this project or activity.",
-  },
-  {
-    year: "2024",
-    title: "ANOTHER PROJECT",
-    tags: ["React", "Node.js"],
-    description: "Brief description of this project or activity.",
-  },
-  {
-    year: "2024",
-    title: "SIDE PROJECT",
-    tags: ["Python", "FastAPI"],
-    description: "Brief description of this project or activity.",
-  },
-  {
-    year: "2023",
-    title: "OPEN SOURCE CONTRIBUTION",
-    tags: ["GitHub", "OSS"],
-    description: "Brief description of this project or activity.",
-  },
-];
-
-const LINKS = [
-  { label: "GitHub",      href: "#", description: "@username",        category: "CODE"    },
-  { label: "LinkedIn",    href: "#", description: "Connect with me",  category: "CAREER"  },
-  { label: "Instagram",   href: "#", description: "@username",        category: "SOCIAL"  },
-  { label: "Twitter / X", href: "#", description: "@username",        category: "SOCIAL"  },
-  { label: "Email",       href: "mailto:your@email.com", description: "your@email.com", category: "CONTACT" },
-  { label: "Website",     href: "#", description: "yourwebsite.com",  category: "WEB"     },
-];
-/* ──────────────────────────────────────────────────────────────────────────── */
-
-function SectionHeader({ label, count }: { label: string; count?: number }) {
+function CheckIcon() {
   return (
-    <div className="flex items-center gap-4 mb-8">
-      <span
-        className="text-[11px] font-bold tracking-[0.35em] text-[#e10600] uppercase flex-shrink-0"
-        style={{ fontFamily: "var(--font-barlow)" }}
-      >
-        {label}
-      </span>
-      <div className="flex-1 h-px bg-[#1a1a1a]" />
-      {count !== undefined && (
-        <span
-          className="text-[11px] font-bold tracking-[0.2em] text-[#252525] flex-shrink-0"
-          style={{ fontFamily: "var(--font-barlow)" }}
-        >
-          {count.toString().padStart(2, "0")}
-        </span>
-      )}
-    </div>
-  );
-}
-
-function ArrowRight() {
-  return (
-    <svg width="17" height="17" viewBox="0 0 24 24" fill="none"
-      stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-      <line x1="5" y1="12" x2="19" y2="12" />
-      <polyline points="12 5 19 12 12 19" />
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="20 6 9 17 4 12" />
     </svg>
   );
 }
 
-export default function Home() {
+const FEATURES = [
+  { title: "간편 설정",       desc: "5분 안에 나만의 링크 페이지 완성" },
+  { title: "무료",            desc: "기본 기능은 모두 무료로 제공"     },
+  { title: "모바일 최적화",   desc: "어떤 기기에서도 완벽하게 표시"   },
+];
+
+const HOW_TO = [
+  { step: "01", title: "가입하기",    desc: "이메일 또는 Google로 30초 만에 가입" },
+  { step: "02", title: "링크 추가",   desc: "SNS, 포트폴리오, 연락처 등 원하는 링크 추가" },
+  { step: "03", title: "공유하기",    desc: "mylink.kr/@나의아이디를 SNS 바이오에 붙여넣기" },
+];
+
+export default function LandingPage() {
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white flex flex-col">
 
-      {/* ── Top stripe: h-4(16px) = background-size(16px) → 네모 안짤림 ── */}
-      <div className="h-4 bg-[#e10600] flex-shrink-0 relative overflow-hidden">
-        <div className="absolute inset-0 checkered" />
-      </div>
+      {/* Top stripe */}
+      <div className="h-[3px] bg-[#e10600]" />
 
-      {/* ── Hero ───────────────────────────────────────────────────────── */}
-      <header className="hero-grid relative overflow-hidden flex-shrink-0">
+      {/* Nav */}
+      <nav className="max-w-5xl mx-auto w-full px-6 md:px-10 py-5 flex items-center justify-between">
+        <span
+          className="text-2xl font-black text-white tracking-tight"
+          style={{ fontFamily: "var(--font-barlow)" }}
+        >
+          MY<span className="text-[#e10600]">LINK</span>
+        </span>
+        <div className="flex items-center gap-3">
+          <Link
+            href="/login"
+            className="text-sm text-[#888] hover:text-white transition-colors px-4 py-2"
+            style={{ fontFamily: "var(--font-barlow)", fontWeight: 700, letterSpacing: "0.1em" }}
+          >
+            로그인
+          </Link>
+          <Link
+            href="/signup"
+            className="text-sm font-bold bg-[#e10600] hover:bg-[#c00000] text-white px-5 py-2 transition-colors"
+            style={{ fontFamily: "var(--font-barlow)", letterSpacing: "0.1em" }}
+          >
+            시작하기
+          </Link>
+        </div>
+      </nav>
+
+      {/* Hero */}
+      <section className="hero-grid relative overflow-hidden flex-1 flex items-center">
         <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-[#e10600]" />
         <div
-          className="absolute -right-4 top-1/2 -translate-y-1/2 text-[14rem] md:text-[18rem] font-black leading-none select-none pointer-events-none text-white"
-          style={{ fontFamily: "var(--font-barlow)", opacity: 0.07 }}
+          className="absolute right-0 bottom-0 text-[22rem] font-black leading-none select-none pointer-events-none text-white opacity-[0.018]"
+          style={{ fontFamily: "var(--font-barlow)" }}
         >
-          {PROFILE.racingNumber}
+          01
         </div>
-
-        <div className="relative max-w-4xl mx-auto px-8 md:px-12 py-16 md:py-24">
-          <div className="flex flex-col md:flex-row items-center gap-10 md:gap-16">
-            <div className="ring-pulse flex-shrink-0">
-              <ProfileImage initials={PROFILE.initials} name={PROFILE.name} size={156} />
-            </div>
-            <div className="text-center md:text-left flex-1">
-              <div className="inline-flex items-center gap-2 mb-3">
-                <span className="block w-1.5 h-1.5 rounded-full bg-[#e10600] animate-pulse" />
-                <span
-                  className="text-[11px] font-bold tracking-[0.35em] text-[#e10600] uppercase"
-                  style={{ fontFamily: "var(--font-barlow)" }}
-                >
-                  {PROFILE.title}
-                </span>
-              </div>
-              <h1
-                className="text-5xl sm:text-6xl lg:text-[5.5rem] font-black tracking-tight leading-[0.88] mb-5"
+        <div className="relative max-w-5xl mx-auto w-full px-6 md:px-10 py-24 md:py-36">
+          <div className="max-w-2xl">
+            <div className="inline-flex items-center gap-2 mb-6">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#e10600] animate-pulse" />
+              <span
+                className="text-[11px] font-bold tracking-[0.35em] text-[#e10600] uppercase"
                 style={{ fontFamily: "var(--font-barlow)" }}
               >
-                {PROFILE.name}
-              </h1>
-              <div className="flex items-center gap-2 mb-5 justify-center md:justify-start">
-                <div className="h-[2px] w-14 bg-[#e10600]" />
-                <div className="h-[2px] w-5 bg-[#2a2a2a]" />
-                <div className="h-[2px] w-2 bg-[#1e1e1e]" />
-              </div>
-              <p className="text-[#666] text-[15px] leading-relaxed max-w-[420px]">
-                {PROFILE.bio}
-              </p>
+                링크트리 클론 서비스
+              </span>
+            </div>
+            <h1
+              className="text-5xl sm:text-6xl lg:text-7xl font-black leading-[0.9] tracking-tight mb-6"
+              style={{ fontFamily: "var(--font-barlow)" }}
+            >
+              나만의 링크 페이지를
+              <br />
+              <span className="text-[#e10600]">지금 바로</span> 만들어보세요
+            </h1>
+            <p className="text-[#666] text-lg leading-relaxed mb-10 max-w-lg">
+              여러 SNS에 흩어진 링크를 하나의 URL로 통합하세요.
+              <br />
+              creatores, 프리랜서, 소상공인 모두를 위한 링크 페이지.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Link
+                href="/signup"
+                className="inline-flex items-center justify-center gap-2 bg-[#e10600] hover:bg-[#c00000] text-white font-bold px-8 py-4 transition-colors text-lg"
+                style={{ fontFamily: "var(--font-barlow)", letterSpacing: "0.05em" }}
+              >
+                무료로 시작하기
+              </Link>
+              <Link
+                href="/hanstar"
+                className="inline-flex items-center justify-center gap-2 border border-[#2a2a2a] hover:border-[#e10600]/40 text-[#888] hover:text-white px-8 py-4 transition-all text-lg font-bold"
+                style={{ fontFamily: "var(--font-barlow)", letterSpacing: "0.05em" }}
+              >
+                데모 보기 →
+              </Link>
             </div>
           </div>
         </div>
-      </header>
+      </section>
 
-      <div className="max-w-4xl mx-auto w-full px-8 md:px-12">
-        <div className="h-px bg-gradient-to-r from-transparent via-[#e10600]/50 to-transparent" />
+      {/* Feature strip */}
+      <div className="border-t border-b border-[#1a1a1a]">
+        <div className="max-w-5xl mx-auto px-6 md:px-10 py-6 grid grid-cols-1 sm:grid-cols-3 gap-0 divide-y sm:divide-y-0 sm:divide-x divide-[#1a1a1a]">
+          {FEATURES.map((f) => (
+            <div key={f.title} className="flex items-center gap-3 px-0 sm:px-8 py-4 sm:py-0 first:pl-0 last:pr-0">
+              <span className="text-[#e10600]"><CheckIcon /></span>
+              <div>
+                <span
+                  className="font-bold text-white text-base"
+                  style={{ fontFamily: "var(--font-barlow)" }}
+                >
+                  {f.title}
+                </span>
+                <span className="text-[#555] text-sm ml-2">{f.desc}</span>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
-      {/* ── Main content ───────────────────────────────────────────────── */}
-      <main className="flex-1 max-w-4xl mx-auto w-full px-8 md:px-12 py-14 space-y-16">
-
-        {/* ABOUT */}
-        <section>
-          <SectionHeader label="ABOUT" />
-          <div className="grid md:grid-cols-3 gap-8 md:gap-12">
-            <p className="md:col-span-2 text-[#777] text-[15px] leading-[1.85]">
-              {ABOUT.text}
-            </p>
-            <div className="flex md:flex-col gap-6 md:gap-6 flex-wrap">
-              {ABOUT.stats.map((s) => (
-                <div key={s.label}>
-                  <div
-                    className="text-[9px] font-bold tracking-[0.3em] text-[#e10600]/60 uppercase mb-1"
-                    style={{ fontFamily: "var(--font-barlow)" }}
-                  >
-                    {s.label}
-                  </div>
-                  <div
-                    className="text-white font-bold text-[15px]"
-                    style={{ fontFamily: "var(--font-barlow)" }}
-                  >
-                    {s.value}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* EXPERIENCE */}
-        <section>
-          <SectionHeader label="EXPERIENCE" count={EXPERIENCES.length} />
-          <div className="grid sm:grid-cols-2 gap-3">
-            {EXPERIENCES.map((exp, i) => (
-              <div
-                key={i}
-                className="group relative border border-[#1a1a1a] bg-[#0e0e0e] px-5 py-5
-                           hover:border-[#e10600]/40 transition-colors duration-200 overflow-hidden"
-              >
-                <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-[#e10600] origin-center scale-y-0 group-hover:scale-y-100 transition-transform duration-200" />
-                <div
-                  className="text-[10px] font-bold tracking-[0.2em] text-[#e10600]/55 mb-3"
-                  style={{ fontFamily: "var(--font-barlow)" }}
-                >
-                  {exp.period}
-                </div>
-                <div
-                  className="text-white font-black text-lg leading-tight mb-1"
-                  style={{ fontFamily: "var(--font-barlow)" }}
-                >
-                  {exp.role}
-                </div>
-                <div
-                  className="text-[#444] text-sm font-bold tracking-wider mb-3"
-                  style={{ fontFamily: "var(--font-barlow)" }}
-                >
-                  {exp.company}
-                </div>
-                <p className="text-[#3a3a3a] text-xs leading-relaxed">{exp.description}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* ACTIVITIES */}
-        <section>
-          <SectionHeader label="ACTIVITIES" count={ACTIVITIES.length} />
-          <div className="space-y-3">
-            {ACTIVITIES.map((act, i) => (
-              <div
-                key={i}
-                className="group relative flex flex-col sm:flex-row sm:items-start gap-4 sm:gap-6
-                           border border-[#1a1a1a] bg-[#0e0e0e] px-5 py-4
-                           hover:border-[#e10600]/40 transition-colors duration-200 overflow-hidden"
-              >
-                <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-[#e10600] origin-center scale-y-0 group-hover:scale-y-100 transition-transform duration-200" />
-
-                {/* Index + Year */}
-                <div className="flex sm:flex-col gap-3 sm:gap-1 flex-shrink-0 sm:w-10">
-                  <span
-                    className="text-[11px] font-black text-[#252525]"
-                    style={{ fontFamily: "var(--font-barlow)" }}
-                  >
-                    {(i + 1).toString().padStart(2, "0")}
-                  </span>
-                  <span
-                    className="text-[11px] font-bold tracking-[0.1em] text-[#e10600]/45"
-                    style={{ fontFamily: "var(--font-barlow)" }}
-                  >
-                    {act.year}
-                  </span>
-                </div>
-
-                {/* Content */}
-                <div className="flex-1 min-w-0">
-                  <div className="flex flex-wrap items-center gap-2 mb-1.5">
-                    <span
-                      className="text-white font-bold text-[15px] leading-none"
-                      style={{ fontFamily: "var(--font-barlow)" }}
-                    >
-                      {act.title}
-                    </span>
-                    <div className="flex gap-1.5 flex-wrap">
-                      {act.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          className="text-[9px] font-bold tracking-[0.15em] text-[#e10600]/65 border border-[#e10600]/20 px-1.5 py-0.5"
-                          style={{ fontFamily: "var(--font-barlow)" }}
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                  <p className="text-[#3a3a3a] text-xs leading-relaxed">{act.description}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* LINKS */}
-        <section>
-          <SectionHeader label="LINKS" count={LINKS.length} />
-          <div className="grid sm:grid-cols-2 gap-3">
-            {LINKS.map((link, i) => (
-              <a
-                key={i}
-                href={link.href}
-                target={link.href.startsWith("http") ? "_blank" : "_self"}
-                rel="noopener noreferrer"
-                className="group relative flex items-center justify-between gap-4
-                           border border-[#1a1a1a] bg-[#0e0e0e] px-5 py-4
-                           hover:border-[#e10600]/50 hover:bg-[#120000]
-                           transition-all duration-200 overflow-hidden"
-              >
-                <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-[#e10600] origin-center scale-y-0 group-hover:scale-y-100 transition-transform duration-200" />
-                <span
-                  className="flex-shrink-0 text-[11px] font-black text-[#222] group-hover:text-[#e10600]/35 transition-colors w-5 text-center"
-                  style={{ fontFamily: "var(--font-barlow)" }}
-                >
-                  {(i + 1).toString().padStart(2, "0")}
-                </span>
-                <div className="flex-1 min-w-0">
-                  <div
-                    className="text-[9px] font-bold tracking-[0.28em] text-[#e10600]/55 uppercase mb-[3px]"
-                    style={{ fontFamily: "var(--font-barlow)" }}
-                  >
-                    {link.category}
-                  </div>
-                  <div
-                    className="text-white font-bold text-[1.1rem] leading-none truncate"
-                    style={{ fontFamily: "var(--font-barlow)" }}
-                  >
-                    {link.label}
-                  </div>
-                  <div className="text-[#3a3a3a] text-xs mt-[3px] truncate">{link.description}</div>
-                </div>
-                <div className="flex-shrink-0 text-[#252525] group-hover:text-[#e10600] group-hover:translate-x-1 transition-all duration-200">
-                  <ArrowRight />
-                </div>
-              </a>
-            ))}
-          </div>
-        </section>
-      </main>
-
-      {/* ── Footer ─────────────────────────────────────────────────────── */}
-      <footer className="flex-shrink-0 border-t border-[#111]">
-        <div className="max-w-4xl mx-auto px-8 md:px-12 py-5 flex items-center justify-between">
+      {/* How it works */}
+      <section className="max-w-5xl mx-auto w-full px-6 md:px-10 py-24">
+        <div className="flex items-center gap-4 mb-12">
           <span
-            className="text-[10px] tracking-[0.25em] text-[#222] uppercase"
+            className="text-[11px] font-bold tracking-[0.35em] text-[#e10600] uppercase flex-shrink-0"
             style={{ fontFamily: "var(--font-barlow)" }}
           >
-            BUILT WITH NEXT.JS
+            HOW IT WORKS
           </span>
-          <div className="h-[2px] w-10 bg-[#e10600]" />
+          <div className="flex-1 h-px bg-[#1a1a1a]" />
+        </div>
+        <div className="grid md:grid-cols-3 gap-4">
+          {HOW_TO.map((h) => (
+            <div
+              key={h.step}
+              className="border border-[#1a1a1a] bg-[#0e0e0e] px-6 py-6 relative overflow-hidden"
+            >
+              <div
+                className="absolute right-4 top-2 text-6xl font-black text-white select-none"
+                style={{ fontFamily: "var(--font-barlow)", opacity: 0.04 }}
+              >
+                {h.step}
+              </div>
+              <div
+                className="text-[#e10600] font-black text-4xl mb-3"
+                style={{ fontFamily: "var(--font-barlow)" }}
+              >
+                {h.step}
+              </div>
+              <div
+                className="text-white font-bold text-xl mb-2"
+                style={{ fontFamily: "var(--font-barlow)" }}
+              >
+                {h.title}
+              </div>
+              <p className="text-[#555] text-sm leading-relaxed">{h.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* CTA Banner */}
+      <section className="border-t border-[#1a1a1a] bg-[#0e0e0e]">
+        <div className="max-w-5xl mx-auto px-6 md:px-10 py-16 text-center">
+          <h2
+            className="text-4xl md:text-5xl font-black mb-4"
+            style={{ fontFamily: "var(--font-barlow)" }}
+          >
+            지금 바로 시작하세요
+          </h2>
+          <p className="text-[#555] mb-8">5분 안에 나만의 링크 페이지 완성</p>
+          <Link
+            href="/signup"
+            className="inline-flex items-center gap-2 bg-[#e10600] hover:bg-[#c00000] text-white font-bold px-10 py-4 transition-colors text-lg"
+            style={{ fontFamily: "var(--font-barlow)", letterSpacing: "0.05em" }}
+          >
+            무료로 시작하기
+          </Link>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="border-t border-[#111]">
+        <div className="max-w-5xl mx-auto px-6 md:px-10 py-5 flex items-center justify-between">
+          <span
+            className="text-[11px] tracking-[0.25em] text-[#222] uppercase font-bold"
+            style={{ fontFamily: "var(--font-barlow)" }}
+          >
+            MYLINK © 2026
+          </span>
+          <div className="h-[2px] w-8 bg-[#e10600]" />
         </div>
       </footer>
-
-      {/* ── Bottom stripe ──────────────────────────────────────────────── */}
-      <div className="h-4 bg-[#e10600] flex-shrink-0 relative overflow-hidden">
-        <div className="absolute inset-0 checkered" />
-      </div>
+      <div className="h-[3px] bg-[#e10600]" />
     </div>
   );
 }
