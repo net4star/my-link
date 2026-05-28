@@ -55,12 +55,17 @@ export default function LandingPage() {
 
       {/* Hero */}
       <section className="hero-grid relative overflow-hidden flex-1 flex items-center border-t border-[#f0f0f0]">
-        <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-[#e10600]" />
+        <div
+          className="absolute left-0 top-0 bottom-0 w-5"
+          style={{
+            background: "repeating-conic-gradient(#111111 0% 25%, #ffffff 0% 50%) 0 0 / 10px 10px",
+          }}
+        />
         <div
           className="absolute right-0 bottom-0 text-[22rem] font-black leading-none select-none pointer-events-none text-[#111] opacity-[0.025]"
           style={{ fontFamily: "var(--font-barlow)" }}
         >
-          01
+          HS30
         </div>
         <div className="relative max-w-5xl mx-auto w-full px-6 md:px-10 py-24 md:py-36">
           <div className="max-w-2xl">
@@ -74,8 +79,8 @@ export default function LandingPage() {
               </span>
             </div>
             <h1
-              className="text-5xl sm:text-6xl lg:text-7xl font-black leading-[0.9] tracking-tight mb-6 text-[#111]"
-              style={{ fontFamily: "var(--font-barlow)" }}
+              className="text-[2rem] xs:text-4xl sm:text-6xl lg:text-7xl font-black leading-[0.95] tracking-tight mb-6 text-[#111]"
+              style={{ fontFamily: "var(--font-barlow)", fontSize: "clamp(1.9rem, 8vw, 4.5rem)" }}
             >
               나만의 링크 페이지를
               <br />

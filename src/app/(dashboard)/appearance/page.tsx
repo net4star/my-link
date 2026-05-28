@@ -3,11 +3,13 @@
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 
+const CHECKER_BG = "repeating-conic-gradient(#111111 0% 25%, #ffffff 0% 50%) 0 0 / 16px 16px";
+
 const THEMES = [
-  { id: "dark",     label: "다크",     bg: "#0a0a0a", btn: "#e10600" },
-  { id: "light",    label: "라이트",   bg: "#f5f5f5", btn: "#111111" },
-  { id: "pastel",   label: "파스텔",   bg: "#fdf4ff", btn: "#9333ea" },
-  { id: "gradient", label: "그라디언트", bg: "#0f172a", btn: "#6366f1" },
+  { id: "dark",     label: "다크",       bg: "#0a0a0a", btn: "#e10600", swatch: "#0a0a0a" },
+  { id: "light",    label: "라이트",     bg: "#f5f5f5", btn: "#111111", swatch: "#f5f5f5" },
+  { id: "checker",  label: "체커키",     bg: "#111111", btn: "#e10600", swatch: "repeating-conic-gradient(#111111 0% 25%, #ffffff 0% 50%) 0 0 / 8px 8px" },
+  { id: "gradient", label: "그라디언트", bg: "#0f172a", btn: "#6366f1", swatch: "#0f172a" },
 ];
 
 const BUTTON_STYLES = [
@@ -61,7 +63,7 @@ export default function AppearancePage() {
   const selected = THEMES.find((t) => t.id === theme)!;
   const btnRadius = btnStyle === "rounded" ? "9999px" : "0px";
   const btnShadow = btnStyle === "shadow" ? "4px 4px 0 rgba(0,0,0,0.15)" : "none";
-  const isLightBg = selected.bg === "#f5f5f5" || selected.bg === "#fdf4ff";
+  const isLightBg = selected.id === "light";
 
   return (
     <div className="flex h-full">
@@ -85,7 +87,7 @@ export default function AppearancePage() {
                 className={`flex items-center gap-3 px-4 py-3 border transition-colors text-left
                   ${theme === t.id ? "border-[#e10600] bg-red-50" : "border-[#e8e8e8] bg-white hover:border-[#d0d0d0]"}`}
               >
-                <div className="w-5 h-5 rounded-full border border-[#e0e0e0] flex-shrink-0" style={{ background: t.bg }} />
+                <div className="w-5 h-5 rounded-full border border-[#e0e0e0] flex-shrink-0" style={{ background: t.swatch }} />
                 <span className={`text-sm font-bold ${theme === t.id ? "text-[#e10600]" : "text-[#555]"}`}
                   style={{ fontFamily: "var(--font-barlow)" }}>{t.label}</span>
               </button>
@@ -170,15 +172,15 @@ export default function AppearancePage() {
         </div>
         <div
           className="border border-[#e8e8e8] p-5 overflow-hidden"
-          style={{ background: selected.bg }}
+          style={{ background: selected.id === "checker" ? CHECKER_BG : selected.bg }}
         >
           <div className="text-center mb-4">
-            <div className="w-14 h-14 rounded-full mx-auto mb-2 flex items-center justify-center"
-              style={{ background: isLightBg ? "#e8e8e8" : "#333" }}>
-              <span className="font-black text-lg" style={{ color: isLightBg ? "#555" : "#fff" }}>HS</span>
+            <div className="w-14 h-14 rounded-full mx-auto mb-2 flex items-center justify-center border-2 border-[#e10600]"
+              style={{ background: isLightBg ? "#e8e8e8" : "#1a1a1a" }}>
+              <span className="font-black text-lg" style={{ color: "#e10600" }}>MY</span>
             </div>
-            <div className="font-bold text-sm" style={{ fontFamily: font, color: isLightBg ? "#111" : "#fff" }}>hanstar</div>
-            <div className="text-xs mt-0.5 opacity-50" style={{ color: isLightBg ? "#111" : "#fff" }}>hanyang university</div>
+            <div className="font-bold text-sm" style={{ fontFamily: font, color: isLightBg ? "#111" : "#fff" }}>username</div>
+            <div className="text-xs mt-0.5 opacity-50" style={{ color: isLightBg ? "#111" : "#fff" }}>나만의 링크 페이지</div>
           </div>
           <div className="space-y-2">
             {["GitHub", "LinkedIn", "Instagram"].map((t) => (
