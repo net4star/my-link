@@ -1,12 +1,53 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { createClient } from "@/lib/supabase/client";
 
 export default function SettingsPage() {
-  const [displayName, setDisplayName] = useState("hanstar");
-  const [username, setUsername] = useState("hanstar");
-  const [bio, setBio] = useState("hanyang university vibe coding project");
+  const [displayName, setDisplayName] = useState("");
+  const [username, setUsername] = useState("");
+  const [bio, setBio] = useState("");
   const [isPublic, setIsPublic] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    async function loadProfile() {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+      const { data } = await supabase.from("profiles").select("*").eq("id", user.id).single();
+      if (data) {
+        setDisplayName(data.display_name ?? "");
+        setUsername(data.username ?? "");
+        setBio(data.bio ?? "");
+        setIsPublic(data.is_public ?? true);
+      }
+      setLoading(false);
+    }
+    loadProfile();
+  }, []);
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setSaving(true);
+    setMessage("");
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+    const { error } = await supabase
+      .from("profiles")
+      .update({ display_name: displayName, username, bio, is_public: isPublic })
+      .eq("id", user.id);
+    setSaving(false);
+    setMessage(error ? `오류: ${error.message}` : "저장되었습니다!");
+    setTimeout(() => setMessage(""), 3000);
+  }
+
+  if (loading) {
+    return <div className="px-8 py-8 text-[#444] text-sm">불러오는 중...</div>;
+  }
 
   return (
     <div className="px-8 py-8 max-w-xl">
@@ -14,10 +55,7 @@ export default function SettingsPage() {
         프로필 설정
       </h1>
 
-      <form
-        onSubmit={(e) => { e.preventDefault(); alert("Supabase 연동 후 저장 가능합니다"); }}
-        className="space-y-6"
-      >
+      <form onSubmit={handleSubmit} className="space-y-6">
         {/* Avatar */}
         <div>
           <div className="text-[11px] font-bold tracking-[0.3em] text-[#e10600] uppercase mb-3"
@@ -26,25 +64,17 @@ export default function SettingsPage() {
           </div>
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 rounded-full bg-[#1a1a1a] border-2 border-[#e10600] flex items-center justify-center flex-shrink-0">
-              <span className="text-[#e10600] font-black text-xl" style={{ fontFamily: "var(--font-barlow)" }}>HS</span>
+              <span className="text-[#e10600] font-black text-xl" style={{ fontFamily: "var(--font-barlow)" }}>
+                {(displayName || username || "?").slice(0, 2).toUpperCase()}
+              </span>
             </div>
-            <div className="flex gap-2">
-              <button
-                type="button"
-                className="px-4 py-2 border border-[#1e1e1e] hover:border-[#e10600]/40 text-[#888] hover:text-white text-xs font-bold transition-all"
-                style={{ fontFamily: "var(--font-barlow)", letterSpacing: "0.1em" }}
-                onClick={() => alert("Supabase Storage 연동 후 업로드 가능합니다")}
-              >
-                사진 변경
-              </button>
-              <button
-                type="button"
-                className="px-4 py-2 border border-[#1e1e1e] hover:border-[#e10600]/40 text-[#555] hover:text-[#e10600] text-xs font-bold transition-all"
-                style={{ fontFamily: "var(--font-barlow)", letterSpacing: "0.1em" }}
-              >
-                삭제
-              </button>
-            </div>
+            <button
+              type="button"
+              className="px-4 py-2 border border-[#1e1e1e] hover:border-[#e10600]/40 text-[#888] hover:text-white text-xs font-bold transition-all"
+              style={{ fontFamily: "var(--font-barlow)", letterSpacing: "0.1em" }}
+            >
+              사진 변경 (준비 중)
+            </button>
           </div>
         </div>
 
@@ -116,12 +146,19 @@ export default function SettingsPage() {
           </button>
         </div>
 
+        {message && (
+          <p className={`text-xs py-1 ${message.startsWith("오류") ? "text-[#e10600]" : "text-green-500"}`}>
+            {message}
+          </p>
+        )}
+
         <button
           type="submit"
-          className="w-full bg-[#e10600] hover:bg-[#c00000] text-white font-bold py-3 transition-colors"
+          disabled={saving}
+          className="w-full bg-[#e10600] hover:bg-[#c00000] disabled:opacity-50 text-white font-bold py-3 transition-colors"
           style={{ fontFamily: "var(--font-barlow)", letterSpacing: "0.1em" }}
         >
-          저장하기
+          {saving ? "저장 중..." : "저장하기"}
         </button>
       </form>
     </div>

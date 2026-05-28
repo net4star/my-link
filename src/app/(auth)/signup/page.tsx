@@ -2,18 +2,39 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
 
 export default function SignupPage() {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    // TODO: Supabase auth
-    // const supabase = createClient();
-    // const { error } = await supabase.auth.signUp({ email, password });
-    alert("Supabase 연동 후 사용 가능합니다");
+    setError("");
+    setLoading(true);
+    const supabase = createClient();
+
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { username },
+      },
+    });
+
+    if (error) {
+      setError(error.message === "User already registered" ? "이미 가입된 이메일입니다" : error.message);
+      setLoading(false);
+      return;
+    }
+
+    router.push("/dashboard");
+    router.refresh();
   }
 
   return (
@@ -81,12 +102,17 @@ export default function SignupPage() {
           />
         </div>
 
+        {error && (
+          <p className="text-[#e10600] text-xs py-1">{error}</p>
+        )}
+
         <button
           type="submit"
-          className="w-full bg-[#e10600] hover:bg-[#c00000] text-white font-bold py-3 transition-colors mt-2"
+          disabled={loading}
+          className="w-full bg-[#e10600] hover:bg-[#c00000] disabled:opacity-50 text-white font-bold py-3 transition-colors mt-2"
           style={{ fontFamily: "var(--font-barlow)", letterSpacing: "0.1em" }}
         >
-          무료로 시작하기
+          {loading ? "가입 중..." : "무료로 시작하기"}
         </button>
 
         <div className="relative flex items-center gap-3 py-1">

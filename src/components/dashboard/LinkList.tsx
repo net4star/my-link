@@ -19,10 +19,15 @@ import {
 import LinkCard from "./LinkCard";
 import LinkEditor from "./LinkEditor";
 import type { Link } from "@/types";
-import { DEMO_LINKS } from "@/lib/mock-data";
+import { createClient } from "@/lib/supabase/client";
 
-export default function LinkList() {
-  const [links, setLinks] = useState<Link[]>(DEMO_LINKS);
+interface Props {
+  initialLinks: Link[];
+  profileId: string;
+}
+
+export default function LinkList({ initialLinks, profileId }: Props) {
+  const [links, setLinks] = useState<Link[]>(initialLinks);
   const [editingLink, setEditingLink] = useState<Link | null | undefined>(undefined);
 
   const sensors = useSensors(
@@ -30,54 +35,54 @@ export default function LinkList() {
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   );
 
-  function handleDragEnd(event: DragEndEvent) {
+  async function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
     if (!over || active.id === over.id) return;
-    setLinks((items) => {
-      const oldIndex = items.findIndex((i) => i.id === active.id);
-      const newIndex = items.findIndex((i) => i.id === over.id);
-      const reordered = arrayMove(items, oldIndex, newIndex).map((item, idx) => ({
-        ...item,
-        sort_order: idx + 1,
-      }));
-      // TODO: await supabase update sort_order
-      return reordered;
-    });
+    const reordered = arrayMove(
+      links,
+      links.findIndex((i) => i.id === active.id),
+      links.findIndex((i) => i.id === over.id)
+    ).map((item, idx) => ({ ...item, sort_order: idx + 1 }));
+    setLinks(reordered);
+    const supabase = createClient();
+    await Promise.all(
+      reordered.map((l) =>
+        supabase.from("links").update({ sort_order: l.sort_order }).eq("id", l.id)
+      )
+    );
   }
 
-  function handleSave(data: { title: string; url: string }) {
+  async function handleSave(data: { title: string; url: string }) {
+    const supabase = createClient();
     if (editingLink?.id) {
-      setLinks((prev) =>
-        prev.map((l) => (l.id === editingLink.id ? { ...l, ...data } : l))
-      );
-      // TODO: await supabase update
+      const { data: updated } = await supabase
+        .from("links")
+        .update({ title: data.title, url: data.url })
+        .eq("id", editingLink.id)
+        .select()
+        .single();
+      if (updated) setLinks((prev) => prev.map((l) => (l.id === editingLink.id ? (updated as Link) : l)));
     } else {
-      const newLink: Link = {
-        id: Date.now().toString(),
-        profile_id: "demo",
-        title: data.title,
-        url: data.url,
-        icon_url: null,
-        is_active: true,
-        sort_order: links.length + 1,
-        scheduled_at: null,
-        expires_at: null,
-        created_at: new Date().toISOString(),
-      };
-      setLinks((prev) => [...prev, newLink]);
-      // TODO: await supabase insert
+      const { data: inserted } = await supabase
+        .from("links")
+        .insert({ profile_id: profileId, title: data.title, url: data.url, sort_order: links.length + 1 })
+        .select()
+        .single();
+      if (inserted) setLinks((prev) => [...prev, inserted as Link]);
     }
   }
 
-  function handleDelete(id: string) {
+  async function handleDelete(id: string) {
     if (!confirm("삭제하시겠어요?")) return;
+    const supabase = createClient();
+    await supabase.from("links").delete().eq("id", id);
     setLinks((prev) => prev.filter((l) => l.id !== id));
-    // TODO: await supabase delete
   }
 
-  function handleToggle(id: string, active: boolean) {
+  async function handleToggle(id: string, active: boolean) {
+    const supabase = createClient();
+    await supabase.from("links").update({ is_active: active }).eq("id", id);
     setLinks((prev) => prev.map((l) => (l.id === id ? { ...l, is_active: active } : l)));
-    // TODO: await supabase update
   }
 
   return (

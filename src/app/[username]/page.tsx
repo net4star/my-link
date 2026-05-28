@@ -1,30 +1,45 @@
 import type { Metadata } from "next";
-import { DEMO_LINKS } from "@/lib/mock-data";
-
-// TODO: replace with Supabase query
-// const supabase = await createClient();
-// const { data: profile } = await supabase.from("profiles").select("*").eq("username", username).single();
-// const { data: links } = await supabase.from("links").select("*").eq("profile_id", profile.id).eq("is_active", true).order("sort_order");
-
-const DEMO_PROFILE = {
-  username: "hanstar",
-  display_name: "hanstar",
-  bio: "hanyang university vibe coding project",
-  initials: "HS",
-};
+import { notFound } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
 
 export async function generateMetadata({ params }: { params: Promise<{ username: string }> }): Promise<Metadata> {
   const { username } = await params;
+  const supabase = await createClient();
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("display_name, bio")
+    .eq("username", username)
+    .eq("is_public", true)
+    .single();
+
   return {
-    title: `${username} | MyLink`,
-    description: DEMO_PROFILE.bio,
+    title: profile ? `${profile.display_name || username} | MyLink` : `${username} | MyLink`,
+    description: profile?.bio ?? "",
   };
 }
 
 export default async function PublicProfilePage({ params }: { params: Promise<{ username: string }> }) {
   const { username } = await params;
-  const profile = DEMO_PROFILE;
-  const links = DEMO_LINKS.filter((l) => l.is_active);
+  const supabase = await createClient();
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("id, username, display_name, bio, is_public")
+    .eq("username", username)
+    .eq("is_public", true)
+    .single();
+
+  if (!profile) notFound();
+
+  const { data: links } = await supabase
+    .from("links")
+    .select("*")
+    .eq("profile_id", profile.id)
+    .eq("is_active", true)
+    .order("sort_order");
+
+  const displayName = profile.display_name || profile.username;
+  const initials = displayName.slice(0, 2).toUpperCase();
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white flex flex-col items-center px-4 py-12">
@@ -35,21 +50,23 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
             className="text-[#e10600] font-black text-2xl select-none"
             style={{ fontFamily: "var(--font-barlow)" }}
           >
-            {profile.initials}
+            {initials}
           </span>
         </div>
         <h1
           className="text-2xl font-black mb-1"
           style={{ fontFamily: "var(--font-barlow)" }}
         >
-          {profile.display_name}
+          {displayName}
         </h1>
-        <p className="text-[#555] text-sm leading-relaxed">{profile.bio}</p>
+        {profile.bio && (
+          <p className="text-[#555] text-sm leading-relaxed">{profile.bio}</p>
+        )}
       </div>
 
       {/* Links */}
       <div className="w-full max-w-sm space-y-2.5">
-        {links.map((link) => (
+        {(links ?? []).map((link) => (
           <a
             key={link.id}
             href={link.url}
@@ -65,6 +82,9 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
             <span className="text-[#333] group-hover:text-[#e10600] group-hover:translate-x-1 transition-all text-xs">→</span>
           </a>
         ))}
+        {(links ?? []).length === 0 && (
+          <p className="text-center text-[#333] text-sm py-8">아직 링크가 없습니다</p>
+        )}
       </div>
 
       {/* Footer */}

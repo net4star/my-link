@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
 
 const NAV = [
   { href: "/dashboard",   label: "대시보드" },
@@ -10,8 +11,20 @@ const NAV = [
   { href: "/settings",    label: "설정"     },
 ];
 
-export default function Sidebar() {
+interface Props {
+  username: string;
+}
+
+export default function Sidebar({ username }: Props) {
   const pathname = usePathname();
+  const router = useRouter();
+
+  async function handleLogout() {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.push("/");
+    router.refresh();
+  }
 
   return (
     <aside className="w-52 flex-shrink-0 border-r border-[#1a1a1a] flex flex-col min-h-screen">
@@ -46,18 +59,20 @@ export default function Sidebar() {
       </nav>
 
       <div className="px-3 py-4 border-t border-[#1a1a1a] space-y-2">
-        <Link
-          href="/hanstar"
-          target="_blank"
-          className="flex items-center gap-2 px-3 py-2 text-xs text-[#444] hover:text-[#888] transition-colors font-bold"
-          style={{ fontFamily: "var(--font-barlow)", letterSpacing: "0.1em" }}
-        >
-          내 페이지 →
-        </Link>
+        {username && (
+          <Link
+            href={`/${username}`}
+            target="_blank"
+            className="flex items-center gap-2 px-3 py-2 text-xs text-[#444] hover:text-[#888] transition-colors font-bold"
+            style={{ fontFamily: "var(--font-barlow)", letterSpacing: "0.1em" }}
+          >
+            내 페이지 →
+          </Link>
+        )}
         <button
           className="flex items-center gap-2 w-full px-3 py-2 text-xs text-[#333] hover:text-[#e10600] transition-colors font-bold text-left"
           style={{ fontFamily: "var(--font-barlow)", letterSpacing: "0.1em" }}
-          onClick={() => alert("Supabase 연동 후 사용 가능")}
+          onClick={handleLogout}
         >
           로그아웃
         </button>
