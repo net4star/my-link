@@ -30,7 +30,7 @@ export default function LoginPage() {
   return (
     <div className="w-full max-w-sm">
       <h1
-        className="text-3xl font-black text-center mb-8"
+        className="text-3xl font-black text-center mb-8 text-[#111]"
         style={{ fontFamily: "var(--font-barlow)" }}
       >
         로그인
@@ -48,7 +48,7 @@ export default function LoginPage() {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="your@email.com"
             required
-            className="w-full bg-[#111] border border-[#1e1e1e] px-4 py-3 text-white placeholder-[#333] focus:outline-none focus:border-[#e10600] transition-colors text-sm"
+            className="w-full bg-white border border-[#e0e0e0] px-4 py-3 text-[#111] placeholder-[#bbb] focus:outline-none focus:border-[#e10600] transition-colors text-sm"
           />
         </div>
         <div>
@@ -62,13 +62,11 @@ export default function LoginPage() {
             onChange={(e) => setPassword(e.target.value)}
             placeholder="••••••••"
             required
-            className="w-full bg-[#111] border border-[#1e1e1e] px-4 py-3 text-white placeholder-[#333] focus:outline-none focus:border-[#e10600] transition-colors text-sm"
+            className="w-full bg-white border border-[#e0e0e0] px-4 py-3 text-[#111] placeholder-[#bbb] focus:outline-none focus:border-[#e10600] transition-colors text-sm"
           />
         </div>
 
-        {error && (
-          <p className="text-[#e10600] text-xs py-1">{error}</p>
-        )}
+        {error && <p className="text-[#e10600] text-xs py-1">{error}</p>}
 
         <button
           type="submit"
@@ -80,14 +78,14 @@ export default function LoginPage() {
         </button>
 
         <div className="relative flex items-center gap-3 py-1">
-          <div className="flex-1 h-px bg-[#1e1e1e]" />
-          <span className="text-xs text-[#333]">OR</span>
-          <div className="flex-1 h-px bg-[#1e1e1e]" />
+          <div className="flex-1 h-px bg-[#e8e8e8]" />
+          <span className="text-xs text-[#bbb]">OR</span>
+          <div className="flex-1 h-px bg-[#e8e8e8]" />
         </div>
 
         <button
           type="button"
-          className="w-full border border-[#1e1e1e] hover:border-[#333] text-[#888] hover:text-white py-3 font-bold transition-all flex items-center justify-center gap-2 text-sm"
+          className="w-full border border-[#e0e0e0] hover:border-[#d0d0d0] text-[#777] hover:text-[#111] py-3 font-bold transition-all flex items-center justify-center gap-2 text-sm bg-white"
           style={{ fontFamily: "var(--font-barlow)", letterSpacing: "0.08em" }}
         >
           <svg width="18" height="18" viewBox="0 0 24 24">
@@ -100,7 +98,7 @@ export default function LoginPage() {
         </button>
       </form>
 
-      <p className="text-center text-sm text-[#444] mt-6">
+      <p className="text-center text-sm text-[#777] mt-6">
         계정이 없으신가요?{" "}
         <Link href="/signup" className="text-[#e10600] hover:underline font-bold">
           회원가입

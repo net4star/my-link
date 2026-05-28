@@ -31,16 +31,16 @@ export default function LinkEditor({ link, onSave, onClose }: Props) {
   }
 
   return (
-    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 px-4">
-      <div className="bg-[#111] border border-[#1e1e1e] w-full max-w-md">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[#1e1e1e]">
+    <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50 px-4">
+      <div className="bg-white border border-[#e8e8e8] w-full max-w-md shadow-lg">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-[#e8e8e8]">
           <span
-            className="font-black text-lg"
+            className="font-black text-lg text-[#111]"
             style={{ fontFamily: "var(--font-barlow)" }}
           >
             {link ? "링크 수정" : "링크 추가"}
           </span>
-          <button onClick={onClose} className="text-[#444] hover:text-white transition-colors text-xl">
+          <button onClick={onClose} className="text-[#bbb] hover:text-[#666] transition-colors text-xl">
             ✕
           </button>
         </div>
@@ -57,7 +57,7 @@ export default function LinkEditor({ link, onSave, onClose }: Props) {
               placeholder="YouTube 채널"
               required
               maxLength={50}
-              className="w-full bg-[#0a0a0a] border border-[#1e1e1e] px-4 py-3 text-white placeholder-[#333] focus:outline-none focus:border-[#e10600] transition-colors text-sm"
+              className="w-full bg-[#f8f8f8] border border-[#e8e8e8] px-4 py-3 text-[#111] placeholder-[#bbb] focus:outline-none focus:border-[#e10600] transition-colors text-sm"
             />
           </div>
           <div>
@@ -71,14 +71,14 @@ export default function LinkEditor({ link, onSave, onClose }: Props) {
               onChange={(e) => setUrl(e.target.value)}
               placeholder="https://youtube.com/@channel"
               required
-              className="w-full bg-[#0a0a0a] border border-[#1e1e1e] px-4 py-3 text-white placeholder-[#333] focus:outline-none focus:border-[#e10600] transition-colors text-sm"
+              className="w-full bg-[#f8f8f8] border border-[#e8e8e8] px-4 py-3 text-[#111] placeholder-[#bbb] focus:outline-none focus:border-[#e10600] transition-colors text-sm"
             />
           </div>
           <div className="flex gap-3 pt-2">
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 border border-[#1e1e1e] hover:border-[#333] text-[#555] hover:text-white py-3 font-bold transition-all text-sm"
+              className="flex-1 border border-[#e8e8e8] hover:border-[#d0d0d0] text-[#777] hover:text-[#111] py-3 font-bold transition-all text-sm"
               style={{ fontFamily: "var(--font-barlow)", letterSpacing: "0.08em" }}
             >
               취소

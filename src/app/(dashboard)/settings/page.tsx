@@ -46,12 +46,12 @@ export default function SettingsPage() {
   }
 
   if (loading) {
-    return <div className="px-8 py-8 text-[#444] text-sm">불러오는 중...</div>;
+    return <div className="px-8 py-8 text-[#999] text-sm">불러오는 중...</div>;
   }
 
   return (
     <div className="px-8 py-8 max-w-xl">
-      <h1 className="text-2xl font-black mb-8" style={{ fontFamily: "var(--font-barlow)" }}>
+      <h1 className="text-2xl font-black mb-8 text-[#111]" style={{ fontFamily: "var(--font-barlow)" }}>
         프로필 설정
       </h1>
 
@@ -63,14 +63,14 @@ export default function SettingsPage() {
             프로필 사진
           </div>
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-full bg-[#1a1a1a] border-2 border-[#e10600] flex items-center justify-center flex-shrink-0">
+            <div className="w-16 h-16 rounded-full bg-white border-2 border-[#e10600] flex items-center justify-center flex-shrink-0">
               <span className="text-[#e10600] font-black text-xl" style={{ fontFamily: "var(--font-barlow)" }}>
                 {(displayName || username || "?").slice(0, 2).toUpperCase()}
               </span>
             </div>
             <button
               type="button"
-              className="px-4 py-2 border border-[#1e1e1e] hover:border-[#e10600]/40 text-[#888] hover:text-white text-xs font-bold transition-all"
+              className="px-4 py-2 border border-[#e8e8e8] hover:border-[#d0d0d0] text-[#777] hover:text-[#111] text-xs font-bold transition-all bg-white"
               style={{ fontFamily: "var(--font-barlow)", letterSpacing: "0.1em" }}
             >
               사진 변경 (준비 중)
@@ -89,7 +89,7 @@ export default function SettingsPage() {
             value={displayName}
             onChange={(e) => setDisplayName(e.target.value)}
             maxLength={50}
-            className="w-full bg-[#0e0e0e] border border-[#1a1a1a] px-4 py-3 text-white focus:outline-none focus:border-[#e10600] transition-colors text-sm"
+            className="w-full bg-white border border-[#e8e8e8] px-4 py-3 text-[#111] focus:outline-none focus:border-[#e10600] transition-colors text-sm"
           />
         </div>
 
@@ -100,17 +100,17 @@ export default function SettingsPage() {
             사용자 ID
           </label>
           <div className="relative">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#444] text-sm">@</span>
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#bbb] text-sm">@</span>
             <input
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ""))}
               minLength={3}
               maxLength={30}
-              className="w-full bg-[#0e0e0e] border border-[#1a1a1a] pl-7 pr-4 py-3 text-white focus:outline-none focus:border-[#e10600] transition-colors text-sm"
+              className="w-full bg-white border border-[#e8e8e8] pl-7 pr-4 py-3 text-[#111] focus:outline-none focus:border-[#e10600] transition-colors text-sm"
             />
           </div>
-          <p className="text-[11px] text-[#333] mt-1">
+          <p className="text-[11px] text-[#bbb] mt-1">
             mylink.kr/<span className="text-[#e10600]">{username}</span>
           </p>
         </div>
@@ -126,28 +126,28 @@ export default function SettingsPage() {
             onChange={(e) => setBio(e.target.value)}
             maxLength={150}
             rows={3}
-            className="w-full bg-[#0e0e0e] border border-[#1a1a1a] px-4 py-3 text-white focus:outline-none focus:border-[#e10600] transition-colors text-sm resize-none"
+            className="w-full bg-white border border-[#e8e8e8] px-4 py-3 text-[#111] focus:outline-none focus:border-[#e10600] transition-colors text-sm resize-none"
           />
-          <p className="text-[11px] text-[#333] text-right mt-1">{bio.length}/150</p>
+          <p className="text-[11px] text-[#bbb] text-right mt-1">{bio.length}/150</p>
         </div>
 
         {/* Public toggle */}
-        <div className="flex items-center justify-between border border-[#1a1a1a] px-4 py-3">
+        <div className="flex items-center justify-between border border-[#e8e8e8] bg-white px-4 py-3">
           <div>
-            <div className="font-bold text-sm" style={{ fontFamily: "var(--font-barlow)" }}>페이지 공개 여부</div>
-            <div className="text-[#444] text-xs mt-0.5">{isPublic ? "공개 중" : "비공개"}</div>
+            <div className="font-bold text-sm text-[#111]" style={{ fontFamily: "var(--font-barlow)" }}>페이지 공개 여부</div>
+            <div className="text-[#999] text-xs mt-0.5">{isPublic ? "공개 중" : "비공개"}</div>
           </div>
           <button
             type="button"
             onClick={() => setIsPublic((v) => !v)}
-            className={`w-10 h-5 rounded-full transition-colors relative ${isPublic ? "bg-[#e10600]" : "bg-[#2a2a2a]"}`}
+            className={`w-10 h-5 rounded-full transition-colors relative ${isPublic ? "bg-[#e10600]" : "bg-[#e0e0e0]"}`}
           >
             <span className={`absolute top-0.5 w-4 h-4 rounded-full bg-white transition-all ${isPublic ? "left-[22px]" : "left-0.5"}`} />
           </button>
         </div>
 
         {message && (
-          <p className={`text-xs py-1 ${message.startsWith("오류") ? "text-[#e10600]" : "text-green-500"}`}>
+          <p className={`text-xs py-1 ${message.startsWith("오류") ? "text-[#e10600]" : "text-green-600"}`}>
             {message}
           </p>
         )}

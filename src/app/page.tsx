@@ -22,7 +22,7 @@ const HOW_TO = [
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white flex flex-col">
+    <div className="min-h-screen bg-white text-[#111] flex flex-col">
 
       {/* Top stripe */}
       <div className="h-[3px] bg-[#e10600]" />
@@ -30,7 +30,7 @@ export default function LandingPage() {
       {/* Nav */}
       <nav className="max-w-5xl mx-auto w-full px-6 md:px-10 py-5 flex items-center justify-between">
         <span
-          className="text-2xl font-black text-white tracking-tight"
+          className="text-2xl font-black text-[#111] tracking-tight"
           style={{ fontFamily: "var(--font-barlow)" }}
         >
           MY<span className="text-[#e10600]">LINK</span>
@@ -38,7 +38,7 @@ export default function LandingPage() {
         <div className="flex items-center gap-3">
           <Link
             href="/login"
-            className="text-sm text-[#888] hover:text-white transition-colors px-4 py-2"
+            className="text-sm text-[#777] hover:text-[#111] transition-colors px-4 py-2"
             style={{ fontFamily: "var(--font-barlow)", fontWeight: 700, letterSpacing: "0.1em" }}
           >
             로그인
@@ -54,10 +54,10 @@ export default function LandingPage() {
       </nav>
 
       {/* Hero */}
-      <section className="hero-grid relative overflow-hidden flex-1 flex items-center">
+      <section className="hero-grid relative overflow-hidden flex-1 flex items-center border-t border-[#f0f0f0]">
         <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-[#e10600]" />
         <div
-          className="absolute right-0 bottom-0 text-[22rem] font-black leading-none select-none pointer-events-none text-white opacity-[0.018]"
+          className="absolute right-0 bottom-0 text-[22rem] font-black leading-none select-none pointer-events-none text-[#111] opacity-[0.025]"
           style={{ fontFamily: "var(--font-barlow)" }}
         >
           01
@@ -74,17 +74,17 @@ export default function LandingPage() {
               </span>
             </div>
             <h1
-              className="text-5xl sm:text-6xl lg:text-7xl font-black leading-[0.9] tracking-tight mb-6"
+              className="text-5xl sm:text-6xl lg:text-7xl font-black leading-[0.9] tracking-tight mb-6 text-[#111]"
               style={{ fontFamily: "var(--font-barlow)" }}
             >
               나만의 링크 페이지를
               <br />
               <span className="text-[#e10600]">지금 바로</span> 만들어보세요
             </h1>
-            <p className="text-[#666] text-lg leading-relaxed mb-10 max-w-lg">
+            <p className="text-[#777] text-lg leading-relaxed mb-10 max-w-lg">
               여러 SNS에 흩어진 링크를 하나의 URL로 통합하세요.
               <br />
-              creatores, 프리랜서, 소상공인 모두를 위한 링크 페이지.
+              크리에이터, 프리랜서, 소상공인 모두를 위한 링크 페이지.
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
               <Link
@@ -96,7 +96,7 @@ export default function LandingPage() {
               </Link>
               <Link
                 href="/hanstar"
-                className="inline-flex items-center justify-center gap-2 border border-[#2a2a2a] hover:border-[#e10600]/40 text-[#888] hover:text-white px-8 py-4 transition-all text-lg font-bold"
+                className="inline-flex items-center justify-center gap-2 border border-[#e0e0e0] hover:border-[#e10600]/40 text-[#777] hover:text-[#111] px-8 py-4 transition-all text-lg font-bold bg-white"
                 style={{ fontFamily: "var(--font-barlow)", letterSpacing: "0.05em" }}
               >
                 데모 보기 →
@@ -107,19 +107,19 @@ export default function LandingPage() {
       </section>
 
       {/* Feature strip */}
-      <div className="border-t border-b border-[#1a1a1a]">
-        <div className="max-w-5xl mx-auto px-6 md:px-10 py-6 grid grid-cols-1 sm:grid-cols-3 gap-0 divide-y sm:divide-y-0 sm:divide-x divide-[#1a1a1a]">
+      <div className="border-t border-b border-[#ebebeb] bg-[#fafafa]">
+        <div className="max-w-5xl mx-auto px-6 md:px-10 py-6 grid grid-cols-1 sm:grid-cols-3 gap-0 divide-y sm:divide-y-0 sm:divide-x divide-[#ebebeb]">
           {FEATURES.map((f) => (
             <div key={f.title} className="flex items-center gap-3 px-0 sm:px-8 py-4 sm:py-0 first:pl-0 last:pr-0">
               <span className="text-[#e10600]"><CheckIcon /></span>
               <div>
                 <span
-                  className="font-bold text-white text-base"
+                  className="font-bold text-[#111] text-base"
                   style={{ fontFamily: "var(--font-barlow)" }}
                 >
                   {f.title}
                 </span>
-                <span className="text-[#555] text-sm ml-2">{f.desc}</span>
+                <span className="text-[#777] text-sm ml-2">{f.desc}</span>
               </div>
             </div>
           ))}
@@ -135,16 +135,16 @@ export default function LandingPage() {
           >
             HOW IT WORKS
           </span>
-          <div className="flex-1 h-px bg-[#1a1a1a]" />
+          <div className="flex-1 h-px bg-[#ebebeb]" />
         </div>
         <div className="grid md:grid-cols-3 gap-4">
           {HOW_TO.map((h) => (
             <div
               key={h.step}
-              className="border border-[#1a1a1a] bg-[#0e0e0e] px-6 py-6 relative overflow-hidden"
+              className="border border-[#ebebeb] bg-white px-6 py-6 relative overflow-hidden hover:border-[#e10600]/30 transition-colors"
             >
               <div
-                className="absolute right-4 top-2 text-6xl font-black text-white select-none"
+                className="absolute right-4 top-2 text-6xl font-black text-[#111] select-none"
                 style={{ fontFamily: "var(--font-barlow)", opacity: 0.04 }}
               >
                 {h.step}
@@ -156,27 +156,27 @@ export default function LandingPage() {
                 {h.step}
               </div>
               <div
-                className="text-white font-bold text-xl mb-2"
+                className="text-[#111] font-bold text-xl mb-2"
                 style={{ fontFamily: "var(--font-barlow)" }}
               >
                 {h.title}
               </div>
-              <p className="text-[#555] text-sm leading-relaxed">{h.desc}</p>
+              <p className="text-[#777] text-sm leading-relaxed">{h.desc}</p>
             </div>
           ))}
         </div>
       </section>
 
       {/* CTA Banner */}
-      <section className="border-t border-[#1a1a1a] bg-[#0e0e0e]">
+      <section className="border-t border-[#ebebeb] bg-[#fafafa]">
         <div className="max-w-5xl mx-auto px-6 md:px-10 py-16 text-center">
           <h2
-            className="text-4xl md:text-5xl font-black mb-4"
+            className="text-4xl md:text-5xl font-black mb-4 text-[#111]"
             style={{ fontFamily: "var(--font-barlow)" }}
           >
             지금 바로 시작하세요
           </h2>
-          <p className="text-[#555] mb-8">5분 안에 나만의 링크 페이지 완성</p>
+          <p className="text-[#777] mb-8">5분 안에 나만의 링크 페이지 완성</p>
           <Link
             href="/signup"
             className="inline-flex items-center gap-2 bg-[#e10600] hover:bg-[#c00000] text-white font-bold px-10 py-4 transition-colors text-lg"
@@ -188,10 +188,10 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-[#111]">
+      <footer className="border-t border-[#ebebeb]">
         <div className="max-w-5xl mx-auto px-6 md:px-10 py-5 flex items-center justify-between">
           <span
-            className="text-[11px] tracking-[0.25em] text-[#222] uppercase font-bold"
+            className="text-[11px] tracking-[0.25em] text-[#bbb] uppercase font-bold"
             style={{ fontFamily: "var(--font-barlow)" }}
           >
             MYLINK © 2026

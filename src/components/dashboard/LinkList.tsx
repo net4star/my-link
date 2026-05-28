@@ -103,14 +103,14 @@ export default function LinkList({ initialLinks, profileId }: Props) {
         </DndContext>
 
         {links.length === 0 && (
-          <div className="border border-dashed border-[#1e1e1e] py-10 text-center text-[#333] text-sm">
+          <div className="border border-dashed border-[#e0e0e0] py-10 text-center text-[#ccc] text-sm bg-white">
             링크를 추가해보세요
           </div>
         )}
 
         <button
           onClick={() => setEditingLink(null)}
-          className="w-full border border-dashed border-[#1e1e1e] hover:border-[#e10600]/40 text-[#444] hover:text-[#888] py-3 transition-all text-sm font-bold flex items-center justify-center gap-2 mt-2"
+          className="w-full border border-dashed border-[#e0e0e0] hover:border-[#e10600]/40 text-[#bbb] hover:text-[#777] bg-white hover:bg-red-50 py-3 transition-all text-sm font-bold flex items-center justify-center gap-2 mt-2"
           style={{ fontFamily: "var(--font-barlow)", letterSpacing: "0.1em" }}
         >
           + 링크 추가

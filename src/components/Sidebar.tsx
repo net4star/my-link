@@ -27,11 +27,11 @@ export default function Sidebar({ username }: Props) {
   }
 
   return (
-    <aside className="w-52 flex-shrink-0 border-r border-[#1a1a1a] flex flex-col min-h-screen">
-      <div className="px-5 py-5 border-b border-[#1a1a1a]">
+    <aside className="w-52 flex-shrink-0 border-r border-[#e8e8e8] bg-white flex flex-col min-h-screen">
+      <div className="px-5 py-5 border-b border-[#e8e8e8]">
         <Link
           href="/"
-          className="text-xl font-black tracking-tight"
+          className="text-xl font-black tracking-tight text-[#111]"
           style={{ fontFamily: "var(--font-barlow)" }}
         >
           MY<span className="text-[#e10600]">LINK</span>
@@ -47,8 +47,8 @@ export default function Sidebar({ username }: Props) {
               href={item.href}
               className={`flex items-center gap-2.5 px-3 py-2.5 text-sm font-bold transition-colors relative
                 ${active
-                  ? "text-white bg-[#111] border-l-2 border-[#e10600]"
-                  : "text-[#444] hover:text-[#888] border-l-2 border-transparent"
+                  ? "text-[#e10600] bg-red-50 border-l-2 border-[#e10600]"
+                  : "text-[#777] hover:text-[#111] hover:bg-[#f8f8f8] border-l-2 border-transparent"
                 }`}
               style={{ fontFamily: "var(--font-barlow)", letterSpacing: "0.08em" }}
             >
@@ -58,19 +58,19 @@ export default function Sidebar({ username }: Props) {
         })}
       </nav>
 
-      <div className="px-3 py-4 border-t border-[#1a1a1a] space-y-2">
+      <div className="px-3 py-4 border-t border-[#e8e8e8] space-y-1">
         {username && (
           <Link
             href={`/${username}`}
             target="_blank"
-            className="flex items-center gap-2 px-3 py-2 text-xs text-[#444] hover:text-[#888] transition-colors font-bold"
+            className="flex items-center gap-2 px-3 py-2 text-xs text-[#777] hover:text-[#111] transition-colors font-bold"
             style={{ fontFamily: "var(--font-barlow)", letterSpacing: "0.1em" }}
           >
             내 페이지 →
           </Link>
         )}
         <button
-          className="flex items-center gap-2 w-full px-3 py-2 text-xs text-[#333] hover:text-[#e10600] transition-colors font-bold text-left"
+          className="flex items-center gap-2 w-full px-3 py-2 text-xs text-[#bbb] hover:text-[#e10600] transition-colors font-bold text-left"
           style={{ fontFamily: "var(--font-barlow)", letterSpacing: "0.1em" }}
           onClick={handleLogout}
         >

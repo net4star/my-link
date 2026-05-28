@@ -25,8 +25,8 @@ export default function LinkCard({ link, onEdit, onDelete, onToggle }: Props) {
     <div
       ref={setNodeRef}
       style={style}
-      className={`group flex items-center gap-3 border bg-[#0e0e0e] px-4 py-3 transition-colors
-        ${isDragging ? "border-[#e10600]/60" : "border-[#1a1a1a] hover:border-[#2a2a2a]"}
+      className={`group flex items-center gap-3 border bg-white px-4 py-3 transition-colors
+        ${isDragging ? "border-[#e10600]/40" : "border-[#e8e8e8] hover:border-[#d0d0d0]"}
         ${!link.is_active ? "opacity-50" : ""}
       `}
     >
@@ -34,7 +34,7 @@ export default function LinkCard({ link, onEdit, onDelete, onToggle }: Props) {
       <button
         {...attributes}
         {...listeners}
-        className="flex-shrink-0 text-[#2a2a2a] hover:text-[#444] cursor-grab active:cursor-grabbing touch-none"
+        className="flex-shrink-0 text-[#ccc] hover:text-[#999] cursor-grab active:cursor-grabbing touch-none"
       >
         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
           <circle cx="9" cy="6" r="1.5"/><circle cx="15" cy="6" r="1.5"/>
@@ -46,21 +46,20 @@ export default function LinkCard({ link, onEdit, onDelete, onToggle }: Props) {
       {/* Info */}
       <div className="flex-1 min-w-0">
         <div
-          className="text-white font-bold text-sm truncate"
+          className="text-[#111] font-bold text-sm truncate"
           style={{ fontFamily: "var(--font-barlow)" }}
         >
           {link.title}
         </div>
-        <div className="text-[#333] text-xs truncate">{link.url}</div>
+        <div className="text-[#bbb] text-xs truncate">{link.url}</div>
       </div>
 
       {/* Actions */}
       <div className="flex items-center gap-2 flex-shrink-0">
-        {/* Toggle */}
         <button
           onClick={() => onToggle(link.id, !link.is_active)}
           className={`w-8 h-4 rounded-full transition-colors relative flex-shrink-0 ${
-            link.is_active ? "bg-[#e10600]" : "bg-[#2a2a2a]"
+            link.is_active ? "bg-[#e10600]" : "bg-[#e0e0e0]"
           }`}
         >
           <span
@@ -72,14 +71,14 @@ export default function LinkCard({ link, onEdit, onDelete, onToggle }: Props) {
 
         <button
           onClick={() => onEdit(link)}
-          className="text-[#333] hover:text-[#888] transition-colors text-xs font-bold px-1"
+          className="text-[#bbb] hover:text-[#666] transition-colors text-xs font-bold px-1"
           style={{ fontFamily: "var(--font-barlow)", letterSpacing: "0.1em" }}
         >
           수정
         </button>
         <button
           onClick={() => onDelete(link.id)}
-          className="text-[#333] hover:text-[#e10600] transition-colors text-xs font-bold px-1"
+          className="text-[#bbb] hover:text-[#e10600] transition-colors text-xs font-bold px-1"
           style={{ fontFamily: "var(--font-barlow)", letterSpacing: "0.1em" }}
         >
           삭제
