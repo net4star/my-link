@@ -7,14 +7,14 @@ import PublicProfileLinks from "@/components/PublicProfileLinks";
 const THEME_BG: Record<string, string> = {
   dark:     "#0a0a0a",
   light:    "#f5f5f5",
-  checker:  "#0a0a0a",
+  checker:  "#ffffff",
   gradient: "#0f172a",
 };
 
 const THEME_TEXT: Record<string, { text: string; subtext: string }> = {
   dark:     { text: "#ffffff", subtext: "#555555" },
   light:    { text: "#111111", subtext: "#777777" },
-  checker:  { text: "#ffffff", subtext: "#aaaaaa" },
+  checker:  { text: "#111111", subtext: "#666666" },
   gradient: { text: "#ffffff", subtext: "#64748b" },
 };
 
@@ -71,7 +71,7 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
   const theme = { bg, text, subtext, btnColor, btnRadius, btnShadow, font };
 
   const bgStyle = themeId === "checker"
-    ? { backgroundColor: "#111111", backgroundImage: "repeating-conic-gradient(#111111 0% 25%, #ffffff 0% 50%)", backgroundSize: "16px 16px" }
+    ? { backgroundColor: "#ffffff", backgroundImage: "repeating-conic-gradient(#ffffff 0% 25%, #ededed 0% 50%)", backgroundSize: "20px 20px" }
     : { background: bg };
 
   return (
@@ -81,12 +81,15 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
     >
       {/* Profile */}
       <div className="w-full max-w-sm text-center mb-8">
-        <div className="w-20 h-20 rounded-full border-[3px] border-[#e10600] mx-auto mb-4 overflow-hidden ring-pulse flex items-center justify-center"
-          style={{ background: themeId === "dark" || themeId === "gradient" || themeId === "checker" ? "#1a1a1a" : "#e8e8e8" }}>
+        <div className="w-20 h-20 rounded-full border-[3px] mx-auto mb-4 overflow-hidden ring-pulse flex items-center justify-center"
+          style={{
+            borderColor: btnColor,
+            background: themeId === "dark" || themeId === "gradient" ? "#1a1a1a" : "#e8e8e8",
+          }}>
           {profile.avatar_url ? (
             <Image src={profile.avatar_url} alt={displayName} width={80} height={80} className="object-cover w-full h-full" />
           ) : (
-            <span className="text-[#e10600] font-black text-2xl select-none" style={{ fontFamily: "var(--font-barlow)" }}>
+            <span className="font-black text-2xl select-none" style={{ fontFamily: "var(--font-barlow)", color: btnColor }}>
               {initials}
             </span>
           )}

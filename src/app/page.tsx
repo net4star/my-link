@@ -62,14 +62,14 @@ export default function LandingPage() {
           }}
         />
         <div
-          className="absolute right-0 bottom-0 text-[22rem] font-black leading-none select-none pointer-events-none text-[#111] opacity-[0.025]"
-          style={{ fontFamily: "var(--font-barlow)" }}
+          className="absolute right-0 bottom-0 font-black leading-none select-none pointer-events-none text-[#111] opacity-[0.025]"
+          style={{ fontFamily: "var(--font-barlow)", fontSize: "clamp(4rem, 20vw, 22rem)" }}
         >
           HS30
         </div>
-        <div className="relative max-w-5xl mx-auto w-full px-6 md:px-10 py-24 md:py-36">
+        <div className="relative max-w-5xl mx-auto w-full pl-8 pr-6 sm:px-8 md:px-10 py-16 sm:py-24 md:py-36">
           <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 mb-6">
+            <div className="inline-flex items-center gap-2 mb-4 sm:mb-6">
               <span className="w-1.5 h-1.5 rounded-full bg-[#e10600] animate-pulse" />
               <span
                 className="text-[11px] font-bold tracking-[0.35em] text-[#e10600] uppercase"
@@ -79,29 +79,28 @@ export default function LandingPage() {
               </span>
             </div>
             <h1
-              className="text-[2rem] xs:text-4xl sm:text-6xl lg:text-7xl font-black leading-[0.95] tracking-tight mb-6 text-[#111]"
+              className="font-black leading-[0.95] tracking-tight mb-5 sm:mb-6 text-[#111]"
               style={{ fontFamily: "var(--font-barlow)", fontSize: "clamp(1.9rem, 8vw, 4.5rem)" }}
             >
               나만의 링크 페이지를
               <br />
               <span className="text-[#e10600]">지금 바로</span> 만들어보세요
             </h1>
-            <p className="text-[#777] text-lg leading-relaxed mb-10 max-w-lg">
+            <p className="text-[#777] text-base sm:text-lg leading-relaxed mb-8 sm:mb-10 max-w-lg">
               여러 SNS에 흩어진 링크를 하나의 URL로 통합하세요.
-              <br />
               크리에이터, 프리랜서, 소상공인 모두를 위한 링크 페이지.
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
               <Link
                 href="/signup"
-                className="inline-flex items-center justify-center gap-2 bg-[#e10600] hover:bg-[#c00000] text-white font-bold px-8 py-4 transition-colors text-lg"
+                className="inline-flex items-center justify-center gap-2 bg-[#e10600] hover:bg-[#c00000] text-white font-bold px-6 py-3.5 sm:px-8 sm:py-4 transition-colors text-base sm:text-lg"
                 style={{ fontFamily: "var(--font-barlow)", letterSpacing: "0.05em" }}
               >
                 무료로 시작하기
               </Link>
               <Link
                 href="/demo"
-                className="inline-flex items-center justify-center gap-2 border border-[#e0e0e0] hover:border-[#e10600]/40 text-[#777] hover:text-[#111] px-8 py-4 transition-all text-lg font-bold bg-white"
+                className="inline-flex items-center justify-center gap-2 border border-[#e0e0e0] hover:border-[#e10600]/40 text-[#777] hover:text-[#111] px-6 py-3.5 sm:px-8 sm:py-4 transition-all text-base sm:text-lg font-bold bg-white"
                 style={{ fontFamily: "var(--font-barlow)", letterSpacing: "0.05em" }}
               >
                 데모 보기 →

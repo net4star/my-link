@@ -3,12 +3,12 @@
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 
-const CHECKER_BG = "repeating-conic-gradient(#111111 0% 25%, #ffffff 0% 50%) 0 0 / 16px 16px";
+const CHECKER_BG = "repeating-conic-gradient(#ffffff 0% 25%, #ededed 0% 50%) 0 0 / 16px 16px";
 
 const THEMES = [
   { id: "dark",     label: "다크",       bg: "#0a0a0a", btn: "#e10600", swatch: "#0a0a0a" },
   { id: "light",    label: "라이트",     bg: "#f5f5f5", btn: "#111111", swatch: "#f5f5f5" },
-  { id: "checker",  label: "체커키",     bg: "#111111", btn: "#e10600", swatch: "repeating-conic-gradient(#111111 0% 25%, #ffffff 0% 50%) 0 0 / 8px 8px" },
+  { id: "checker",  label: "체커키",     bg: "#ffffff", btn: "#111111", swatch: "repeating-conic-gradient(#ffffff 0% 25%, #ededed 0% 50%) 0 0 / 8px 8px" },
   { id: "gradient", label: "그라디언트", bg: "#0f172a", btn: "#6366f1", swatch: "#0f172a" },
 ];
 
@@ -63,12 +63,55 @@ export default function AppearancePage() {
   const selected = THEMES.find((t) => t.id === theme)!;
   const btnRadius = btnStyle === "rounded" ? "9999px" : "0px";
   const btnShadow = btnStyle === "shadow" ? "4px 4px 0 rgba(0,0,0,0.15)" : "none";
-  const isLightBg = selected.id === "light";
+  const isLightBg = selected.id === "light" || selected.id === "checker";
+  const previewText = isLightBg ? "#111" : "#fff";
 
   return (
-    <div className="flex h-full">
-      {/* Settings */}
-      <div className="flex-1 px-8 py-8 max-w-xl">
+    <div className="flex flex-col lg:flex-row lg:h-full">
+
+      {/* Preview: sticky top on mobile / right column on desktop */}
+      <div className="sticky top-0 z-10 bg-white border-b border-[#e8e8e8] px-4 py-4
+                      lg:static lg:border-b-0 lg:border-l lg:w-72 lg:flex-shrink-0 lg:p-6 lg:order-2">
+        <div className="text-[10px] font-bold tracking-[0.3em] text-[#e10600] uppercase mb-3"
+          style={{ fontFamily: "var(--font-barlow)" }}>
+          실시간 미리보기
+        </div>
+        <div
+          className="border border-[#e8e8e8] p-4 lg:p-5 overflow-hidden"
+          style={{ background: selected.id === "checker" ? CHECKER_BG : selected.bg }}
+        >
+          <div className="text-center mb-3">
+            <div
+              className="w-12 h-12 lg:w-14 lg:h-14 rounded-full mx-auto mb-2 flex items-center justify-center border-2"
+              style={{ background: isLightBg ? "#e8e8e8" : "#1a1a1a", borderColor: btnColor }}
+            >
+              <span className="font-black text-base lg:text-lg" style={{ color: btnColor }}>MY</span>
+            </div>
+            <div className="font-bold text-sm" style={{ fontFamily: font, color: previewText }}>username</div>
+            <div className="text-xs mt-0.5 opacity-50" style={{ color: previewText }}>나만의 링크 페이지</div>
+          </div>
+          <div className="space-y-2">
+            {["GitHub", "LinkedIn", "Instagram"].map((t) => (
+              <div
+                key={t}
+                className="px-4 py-2.5 text-center text-xs font-bold"
+                style={{
+                  background: btnColor,
+                  color: "#fff",
+                  borderRadius: btnRadius,
+                  boxShadow: btnShadow,
+                  fontFamily: font,
+                }}
+              >
+                {t}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Settings (scrollable) */}
+      <div className="flex-1 px-4 sm:px-8 py-6 sm:py-8 lg:max-w-xl lg:order-1">
         <h1 className="text-2xl font-black mb-8 text-[#111]" style={{ fontFamily: "var(--font-barlow)" }}>
           외관 설정
         </h1>
@@ -83,7 +126,7 @@ export default function AppearancePage() {
             {THEMES.map((t) => (
               <button
                 key={t.id}
-                onClick={() => setTheme(t.id)}
+                onClick={() => { setTheme(t.id); setBtnColor(t.btn); }}
                 className={`flex items-center gap-3 px-4 py-3 border transition-colors text-left
                   ${theme === t.id ? "border-[#e10600] bg-red-50" : "border-[#e8e8e8] bg-white hover:border-[#d0d0d0]"}`}
               >
@@ -162,44 +205,6 @@ export default function AppearancePage() {
         >
           {saving ? "저장 중..." : "저장하기"}
         </button>
-      </div>
-
-      {/* Preview */}
-      <div className="w-72 flex-shrink-0 border-l border-[#e8e8e8] p-6 hidden lg:block bg-white">
-        <div className="text-[10px] font-bold tracking-[0.3em] text-[#e10600] uppercase mb-4"
-          style={{ fontFamily: "var(--font-barlow)" }}>
-          실시간 미리보기
-        </div>
-        <div
-          className="border border-[#e8e8e8] p-5 overflow-hidden"
-          style={{ background: selected.id === "checker" ? CHECKER_BG : selected.bg }}
-        >
-          <div className="text-center mb-4">
-            <div className="w-14 h-14 rounded-full mx-auto mb-2 flex items-center justify-center border-2 border-[#e10600]"
-              style={{ background: isLightBg ? "#e8e8e8" : "#1a1a1a" }}>
-              <span className="font-black text-lg" style={{ color: "#e10600" }}>MY</span>
-            </div>
-            <div className="font-bold text-sm" style={{ fontFamily: font, color: isLightBg ? "#111" : "#fff" }}>username</div>
-            <div className="text-xs mt-0.5 opacity-50" style={{ color: isLightBg ? "#111" : "#fff" }}>나만의 링크 페이지</div>
-          </div>
-          <div className="space-y-2">
-            {["GitHub", "LinkedIn", "Instagram"].map((t) => (
-              <div
-                key={t}
-                className="px-4 py-2.5 text-center text-xs font-bold"
-                style={{
-                  background: btnColor,
-                  color: "#fff",
-                  borderRadius: btnRadius,
-                  boxShadow: btnShadow,
-                  fontFamily: font,
-                }}
-              >
-                {t}
-              </div>
-            ))}
-          </div>
-        </div>
       </div>
     </div>
   );
